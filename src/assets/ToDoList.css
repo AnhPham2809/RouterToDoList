@@ -1,0 +1,70 @@
+.ToDoList {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0059ff;
+    color: #fff;
+    padding: 0.75rem 1rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    cursor:pointer;
+  }
+
+
+  .todo-input::placeholder {
+    color: white;
+  }
+  
+  .todo-button {
+    background: #0043be;
+    color: #fff;
+    border: none;
+    padding: 0.55rem;
+    cursor: pointer;
+  }
+
+  .todo-button-remove {
+    background: red;
+    color: #fff;
+    border: none;
+    padding: 0.55rem;
+    cursor: pointer;
+  }
+
+  .confirm-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: black;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .confirm-yes{
+    margin: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    background-color: #4CAF50;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .confirm-no{
+    margin: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    background-color: red;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .confirm-popup button:hover {
+    filter: brightness(0.8);
+  }
+

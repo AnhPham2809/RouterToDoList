@@ -1,0 +1,16 @@
+div {
+ background-color:grey;
+ border-radius: 15px;
+}
+
+.todo-input {
+    outline: none;
+    background: none;
+    border: 1px solid #33f8ff;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    width: 300px;
+    color: #fff;
+  }
+  
