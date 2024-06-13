@@ -16,11 +16,12 @@
   }
   
   .todo-button {
-    background: #0043be;
+    background: green;
     color: #fff;
     border: none;
     padding: 0.55rem;
     cursor: pointer;
+    border-radius: 10px;
   }
 
   .todo-button-remove {

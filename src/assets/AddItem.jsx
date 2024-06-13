@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import "./AddItem.css"
 
 const AddItem = () => {
     const [userInput, setUserInput] = useState('');
-    const [toDoList, setToDoList] = useState([]);
+
+    const { state } = useLocation();
+const { toDoList } = state || {};
 
     const navigate = useNavigate();
 
@@ -14,9 +16,11 @@ const AddItem = () => {
     };
 
     const handleSubmit = (e) => {
+      console.log('handleSubmit called');
         e.preventDefault();
-        const newToDoList = [...toDoList, {id: toDoList.length +1, task: userInput, complete: false}];
-        navigate('/', {state: {toDoList : newToDoList},
+        const newTask = {id: toDoList.length +1, task: userInput, complete: false};
+        const newToDoList = [...toDoList, newTask ];
+        navigate('/', {state: {toDoList : newToDoList}
         });
     };
 
