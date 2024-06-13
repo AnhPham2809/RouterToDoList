@@ -46,7 +46,6 @@ return (
 <h1> The To Do List! Router version!</h1>
 <Link className="todo-button" to="add-item" state={{ toDoList: toDoList }}>Add Item</Link>
 
-
 <ul>
         {toDoList.map((item) => (
           <p key={item.id}>
@@ -61,6 +60,9 @@ return (
       >
              <span>
               {item.task}
+            </span>
+            <span>
+                Due: {item.dueDate}
             </span>
             <button className="todo-button-remove" 
             onClick={(e) => {
