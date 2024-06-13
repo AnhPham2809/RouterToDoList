@@ -14,9 +14,6 @@ useEffect(() => {
 if (state && state.toDoList) {
     setToDoList(state.toDoList);
 }
-else {
-    setToDoList([]);
-}
 }, [state]);
 
 
@@ -34,22 +31,49 @@ const handleCancelRemove = () => {
     setShowConfirm(false);
 }
 
+const handleComplete = (id) => {
+    const updatedList = toDoList.map((item) => {
+        if (item.id === id){
+            item.complete = !item.complete;
+        }
+        return item;
+    });
+    setToDoList(updatedList);
+}
+
 return (
 <div>
 <h1> The To Do List! Router version!</h1>
 <Link className="todo-button" to="add-item" state={{ toDoList: toDoList }}>Add Item</Link>
-<ul>
-    {toDoList.map((task) => (
-        <p className ="ToDoList" key={task.id}>
-            {task.task}
-            <button className="todo-button-remove" 
-            onClick={() => handleDeleteTask(task.id)}>
-                Remove
-                </button>
-        </p>
-    ))}
-</ul>
 
+
+<ul>
+        {toDoList.map((item) => (
+          <p key={item.id}>
+
+<div
+        className="ToDoList"
+        onClick={() => handleComplete(item.id)}
+        style={{
+          background: item.complete ? 'green' : 'black',
+          cursor: 'pointer' // add a pointer cursor to indicate it's clickable
+        }}
+      >
+             <span>
+              {item.task}
+            </span>
+            <button className="todo-button-remove" 
+            onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                handleDeleteTask(item.id)}}>Delete</button>
+            </div>
+          </p>
+        ))}
+      </ul>
+        {showConfirm && (
+          <div className="big-layer-to-prevent-user-to-click" onClick={(e) => e.stopPropagation()} />
+        )}
 {showConfirm && (
      <div className="confirm-popup">
 <p>Do you really want to remove this task?</p>
