@@ -1,5 +1,5 @@
 import {useState, useEffect} from "react";
-import {  useLocation, Link } from "react-router-dom";
+import {  useLocation, Link, useNavigate  } from "react-router-dom";
 import "./ToDoList.css"
 
 const ToDoList = () => {
@@ -9,10 +9,14 @@ const [showConfirm, setShowConfirm] = useState(false);
 const [taskToRemove, setTaskToRemove] = useState(null);
 
 const {state}= useLocation();
+const navigate = useNavigate();
 
 useEffect(() => {
 if (state && state.toDoList) {
     setToDoList(state.toDoList);
+}
+else {
+  setToDoList([]);
 }
 }, [state]);
 
@@ -41,6 +45,10 @@ const handleComplete = (id) => {
     setToDoList(updatedList);
 }
 
+const handleEditTask = (id) => {
+  navigate(`/edit-item/${id}`, { state: { toDoList, id } });
+};
+
 return (
 <div>
 <h1> The To Do List! Router version!</h1>
@@ -64,11 +72,20 @@ return (
             <span>
                 Due: {item.dueDate}
             </span>
+            <div className="button-holder">
             <button className="todo-button-remove" 
             onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
                 handleDeleteTask(item.id)}}>Delete</button>
+
+<button
+                className="todo-button-edit"
+                onClick={() => handleEditTask(item.id)}
+>
+                Edit
+              </button>
+              </div>
             </div>
           </p>
         ))}

@@ -36,7 +36,7 @@ const { toDoList } = state || {};
     };
 
     const handleCancel = () => {
-      navigate('/', {replace: true});
+      navigate('/', {state: {toDoList: state.toDoList}});
     }
 
     return (
