@@ -21,7 +21,9 @@ else {
 }, [state]);
 
 
-const handleDeleteTask = (taskId) => {
+const handleDeleteTask = (e, taskId) => {
+  e.stopPropagation();
+  e.preventDefault();
     setTaskToRemove(taskId);
     setShowConfirm(true);
 }
@@ -75,9 +77,7 @@ return (
             <div className="button-holder">
             <button className="todo-button-remove" 
             onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                handleDeleteTask(item.id)}}>Delete</button>
+                handleDeleteTask(e,item.id)}}>Delete</button>
 
 <button
                 className="todo-button-edit"

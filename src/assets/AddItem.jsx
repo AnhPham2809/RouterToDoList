@@ -66,7 +66,7 @@ const { toDoList } = state || {};
             value = {dueDate}
             onChange={handleDueDateChange}
             placeholder="Due Date: "
-            onFocus="this.showPicker()"
+
             />
   </div>
             <br></br>
