@@ -2,7 +2,7 @@ import "./App.css";
 import Routes from "./Routes/Routes";
 
 function App() {
-   return <Routes />;
+  return <Routes />;
 }
 
 export default App;

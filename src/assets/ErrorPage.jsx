@@ -1,15 +1,15 @@
-import "./ErrorPage.css"
+import "./ErrorPage.css";
 
 function ErrorPage() {
-    return (
-<div className="site">
-        <h1> 
-         Error 404 
+  return (
+    <div className='site'>
+      <h1>
+        Error 404
         <br></br>
         Page Not Found
-        </h1>
-</div>
-    );
+      </h1>
+    </div>
+  );
 }
 
 export default ErrorPage;
