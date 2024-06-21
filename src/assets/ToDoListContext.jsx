@@ -1,22 +1,39 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 const ToDoListContext = createContext();
 
 const ToDoListProvider = ({ children }) => {
-  const [toDoList, setToDoList] = useState([]);
+  const [toDoList, setToDoList] = useState(() => {
+    const storedList = localStorage.getItem("toDoList");
+    return storedList ? JSON.parse(storedList) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("toDoList", JSON.stringify(toDoList));
+  }, [toDoList]);
 
   const addItem = (newItem) => {
     setToDoList((prevList) => [...prevList, newItem]);
   };
 
-  const editItem = (updatedItem) => {
+  const editItem = (id, updatedItem) => {
     setToDoList((prevList) =>
-      prevList.map((item) => (item.id === updatedItem.id ? updatedItem : item))
+      prevList.map((item) => {
+        if (item.id === id) {
+          return { ...item, ...updatedItem };
+        }
+        return item;
+      })
     );
   };
 
   const deleteItem = (itemId) => {
-    setToDoList((prevList) => prevList.filter((item) => item.id !== itemId));
+    setToDoList((prevList) => {
+      const newList = prevList.filter((item) => item.id !== itemId);
+      return newList.map((item) =>
+        item.id > itemId ? { ...item, id: item.id - 1 } : item
+      );
+    });
   };
 
   return (

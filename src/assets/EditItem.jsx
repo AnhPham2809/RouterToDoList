@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { ToDoListContext } from "./ToDoListContext";
 import "./EditItem.css";
 
 //Notes for Zee reading, the edit button main function (to edit) works. But something is very wrong with the completed status.
@@ -10,12 +11,13 @@ const EditItem = () => {
   const [dueDate, setDueDate] = useState("");
   const { id } = state;
   const navigate = useNavigate();
+  const { editItem } = useContext(ToDoListContext);
 
   useEffect(() => {
     const task = state.toDoList.find((item) => item.id === state.id);
     setUserInput(task.task);
     setDueDate(task.dueDate);
-  }, [state]);
+  }, [state.toDoList, state.id]);
 
   const handleChange = (e) => {
     setUserInput(e.currentTarget.value);
@@ -27,23 +29,19 @@ const EditItem = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const task = state.toDoList.find((item) => item.id === state.id);
     const updatedTask = {
       id,
       task: userInput,
-      complete: state.complete,
+      complete: task.complete,
       dueDate: dueDate,
     };
-    const updatedToDoList = state.toDoList.map((item) => {
-      if (item.id === id) {
-        return updatedTask;
-      }
-      return item;
-    });
-    navigate("/", { state: { toDoList: updatedToDoList } });
+    editItem(updatedTask);
+    navigate("/", { replace: true });
   };
 
   const handleCancel = () => {
-    navigate("/", { state: { toDoList: state.toDoList } });
+    navigate("/", { replace: true });
   };
   return (
     <div>

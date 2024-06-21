@@ -28,13 +28,14 @@ const ToDoList = () => {
   };
 
   const handleComplete = (id) => {
-    editItem(id, {
-      complete: !toDoList.find((item) => item.id === id).complete,
-    });
+    const itemToUpdate = toDoList.find((item) => item.id === id);
+    if (itemToUpdate) {
+      editItem(id, { ...itemToUpdate, complete: !itemToUpdate.complete });
+    }
   };
 
   const handleEditTask = (id) => {
-    navigate(`/edit-item/${id}`);
+    navigate(`/edit-item/${id}`, { state: { toDoList, id } });
   };
 
   return (
@@ -59,6 +60,7 @@ const ToDoList = () => {
               }}>
               <span>{item.task}</span>
               <span>Due: {item.dueDate}</span>
+              <span>{item.complete ? "Complete" : "Not Complete"}</span>
               <div className='button-holder'>
                 <button
                   className='todo-button-remove'
