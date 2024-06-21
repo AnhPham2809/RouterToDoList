@@ -1,23 +1,15 @@
-import { useState, useEffect } from "react";
-import { useLocation, Link, useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./ToDoList.css";
+import { ToDoListContext } from "./ToDoListContext";
 
 const ToDoList = () => {
-  const [toDoList, setToDoList] = useState([]);
+  const { toDoList, editItem, deleteItem } = useContext(ToDoListContext);
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [taskToRemove, setTaskToRemove] = useState(null);
 
-  const { state } = useLocation();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (state && state.toDoList) {
-      setToDoList(state.toDoList);
-    } else {
-      setToDoList([]);
-    }
-  }, [state]);
 
   const handleDeleteTask = (e, taskId) => {
     e.stopPropagation();
@@ -27,7 +19,7 @@ const ToDoList = () => {
   };
 
   const handleConfirmRemove = () => {
-    setToDoList(toDoList.filter((task) => task.id !== taskToRemove));
+    deleteItem(taskToRemove);
     setShowConfirm(false);
   };
 
@@ -36,17 +28,13 @@ const ToDoList = () => {
   };
 
   const handleComplete = (id) => {
-    const updatedList = toDoList.map((item) => {
-      if (item.id === id) {
-        item.complete = !item.complete;
-      }
-      return item;
+    editItem(id, {
+      complete: !toDoList.find((item) => item.id === id).complete,
     });
-    setToDoList(updatedList);
   };
 
   const handleEditTask = (id) => {
-    navigate(`/edit-item/${id}`, { state: { toDoList, id } });
+    navigate(`/edit-item/${id}`);
   };
 
   return (
