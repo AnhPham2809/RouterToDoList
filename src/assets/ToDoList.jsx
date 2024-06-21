@@ -73,8 +73,6 @@ const ToDoList = () => {
                 <button
                   className='todo-button-edit'
                   onClick={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
                     handleEditTask(item.id);
                   }}>
                   Edit
