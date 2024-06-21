@@ -36,7 +36,7 @@ const EditItem = () => {
       complete: task.complete,
       dueDate: dueDate,
     };
-    editItem(updatedTask);
+    editItem(state.id, updatedTask);
     navigate("/", { replace: true });
   };
 

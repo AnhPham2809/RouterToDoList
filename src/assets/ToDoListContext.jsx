@@ -20,7 +20,7 @@ const ToDoListProvider = ({ children }) => {
     setToDoList((prevList) =>
       prevList.map((item) => {
         if (item.id === id) {
-          return { ...item, ...updatedItem };
+          return updatedItem;
         }
         return item;
       })

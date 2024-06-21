@@ -72,9 +72,7 @@ const ToDoList = () => {
 
                 <button
                   className='todo-button-edit'
-                  onClick={(e) => {
-                    handleEditTask(item.id);
-                  }}>
+                  onClick={() => handleEditTask(item.id)}>
                   Edit
                 </button>
               </div>
