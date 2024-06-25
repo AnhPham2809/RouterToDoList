@@ -3,8 +3,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { ToDoListContext } from "./ToDoListContext";
 import "./EditItem.css";
 
-//Notes for Zee reading, the edit button main function (to edit) works. But something is very wrong with the completed status.
-// Pressing Cancel will flips the current complete status. Pressing Save will always set it to not complete for some reason.
 const EditItem = () => {
   const { state } = useLocation();
   const [userInput, setUserInput] = useState("");
@@ -29,14 +27,14 @@ const EditItem = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const task = state.toDoList.find((item) => item.id === state.id);
+    const task = state.toDoList.find((item) => item.id === id);
     const updatedTask = {
       id,
       task: userInput,
       complete: task.complete,
       dueDate: dueDate,
     };
-    editItem(state.id, updatedTask);
+    editItem(id, updatedTask);
     navigate("/", { replace: true });
   };
 

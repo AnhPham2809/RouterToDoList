@@ -25,7 +25,7 @@ const AddItem = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const newTask = {
-      id: toDoList.length + 1,
+      id: `${toDoList.length + 1}`,
       task: userInput,
       complete: false,
       dueDate: dueDate,
@@ -35,7 +35,7 @@ const AddItem = () => {
   };
 
   const handleCancel = () => {
-    navigate("/", { state: { toDoList: state.toDoList } });
+    navigate("/", { replace: true });
   };
 
   return (

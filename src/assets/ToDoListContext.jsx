@@ -3,37 +3,52 @@ import PropTypes from "prop-types";
 const ToDoListContext = createContext();
 
 const ToDoListProvider = ({ children }) => {
-  const [toDoList, setToDoList] = useState(() => {
-    const storedList = localStorage.getItem("toDoList");
-    return storedList ? JSON.parse(storedList) : [];
-  });
+  const [toDoList, setToDoList] = useState([]);
 
   useEffect(() => {
-    localStorage.setItem("toDoList", JSON.stringify(toDoList));
-  }, [toDoList]);
+    fetch("http://localhost:3000/toDoList")
+      .then((response) => response.json())
+      .then((data) => setToDoList(data));
+  }, []);
 
   const addItem = (newItem) => {
-    setToDoList((prevList) => [...prevList, newItem]);
+    fetch("http://localhost:3000/toDoList", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newItem),
+    })
+      .then((response) => response.json())
+      .then((newItem) => {
+        const maxId = toDoList.reduce((max, item) => Math.max(max, item.id), 0);
+        setToDoList((prevList) => [...prevList, { ...newItem, id: maxId + 1 }]);
+      });
   };
 
   const editItem = (id, updatedItem) => {
-    setToDoList((prevList) =>
-      prevList.map((item) => {
-        if (item.id === id) {
-          return updatedItem;
-        }
-        return item;
-      })
-    );
+    fetch(`http://localhost:3000/toDoList/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedItem),
+    })
+      .then((response) => response.json())
+      .then((updatedItem) =>
+        setToDoList((prevList) =>
+          prevList.map((item) => (item.id === id ? updatedItem : item))
+        )
+      );
   };
 
-  const deleteItem = (itemId) => {
-    setToDoList((prevList) => {
-      const newList = prevList.filter((item) => item.id !== itemId);
-      return newList.map((item) =>
-        item.id > itemId ? { ...item, id: item.id - 1 } : item
-      );
-    });
+  const deleteItem = (id) => {
+    fetch(`http://localhost:3000/toDoList/${id}`, { method: "DELETE" })
+      .then((response) => response.json())
+      .then(() => {
+        setToDoList((prevList) => {
+          const newList = prevList.filter((item) => item.id !== id);
+          return newList.map((item) =>
+            item.id > id ? { ...item, id: item.id - 1 } : item
+          );
+        });
+      });
   };
 
   return (
