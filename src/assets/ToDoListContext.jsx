@@ -1,59 +1,47 @@
 import { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import {
+  addItem,
+  editItem,
+  deleteItem,
+  fetchToDoList,
+} from "../Utility/methods";
+
 const ToDoListContext = createContext();
 
 const ToDoListProvider = ({ children }) => {
   const [toDoList, setToDoList] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/toDoList")
-      .then((response) => response.json())
-      .then((data) => setToDoList(data));
+    fetchToDoList().then((data) => setToDoList(data));
   }, []);
 
-  const addItem = (newItem) => {
-    fetch("http://localhost:3000/toDoList", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newItem),
-    })
-      .then((response) => response.json())
-      .then((newItem) => {
-        const maxId = toDoList.reduce((max, item) => Math.max(max, item.id), 0);
-        setToDoList((prevList) => [...prevList, { ...newItem, id: maxId + 1 }]);
-      });
+  const handleAddItem = (newItem) => {
+    addItem(newItem).then((newItem) => {
+      setToDoList((prevList) => [
+        ...prevList,
+        { ...newItem, id: `${prevList.length}` },
+      ]);
+    });
   };
 
-  const editItem = (id, updatedItem) => {
-    fetch(`http://localhost:3000/toDoList/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedItem),
-    })
-      .then((response) => response.json())
-      .then((updatedItem) =>
-        setToDoList((prevList) =>
-          prevList.map((item) => (item.id === id ? updatedItem : item))
-        )
+  const handleEditItem = (id, updatedItem) => {
+    editItem(id, updatedItem).then((updatedItem) => {
+      setToDoList((prevList) =>
+        prevList.map((item) => (item.id === id ? updatedItem : item))
       );
+    });
   };
 
-  const deleteItem = (id) => {
-    fetch(`http://localhost:3000/toDoList/${id}`, { method: "DELETE" })
-      .then((response) => response.json())
-      .then(() => {
-        setToDoList((prevList) => {
-          const newList = prevList.filter((item) => item.id !== id);
-          return newList.map((item) =>
-            item.id > id ? { ...item, id: item.id - 1 } : item
-          );
-        });
-      });
+  const handleDeleteItem = (id) => {
+    deleteItem(id).then(() => {
+      setToDoList((prevList) => prevList.filter((item) => item.id !== id));
+    });
   };
 
   return (
     <ToDoListContext.Provider
-      value={{ toDoList, addItem, editItem, deleteItem }}>
+      value={{ toDoList, handleAddItem, handleEditItem, handleDeleteItem }}>
       {children}
     </ToDoListContext.Provider>
   );

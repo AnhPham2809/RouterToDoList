@@ -4,7 +4,8 @@ import "./ToDoList.css";
 import { ToDoListContext } from "./ToDoListContext";
 
 const ToDoList = () => {
-  const { toDoList, editItem, deleteItem } = useContext(ToDoListContext);
+  const { toDoList, handleEditItem, handleDeleteItem } =
+    useContext(ToDoListContext);
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [taskToRemove, setTaskToRemove] = useState(null);
@@ -19,7 +20,7 @@ const ToDoList = () => {
   };
 
   const handleConfirmRemove = () => {
-    deleteItem(taskToRemove);
+    handleDeleteItem(taskToRemove);
     setShowConfirm(false);
   };
 
@@ -30,7 +31,7 @@ const ToDoList = () => {
   const handleComplete = (id) => {
     const itemToUpdate = toDoList.find((item) => item.id === id);
     if (itemToUpdate) {
-      editItem(id, { ...itemToUpdate, complete: !itemToUpdate.complete });
+      handleEditItem(id, { ...itemToUpdate, complete: !itemToUpdate.complete });
     }
   };
 

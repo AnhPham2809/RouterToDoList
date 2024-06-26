@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ToDoListContext } from "./ToDoListContext";
 import "./AddItem.css";
 
@@ -8,11 +8,11 @@ const AddItem = () => {
   const [dueDate, setDueDate] = useState("");
   const [inputFocus, setInputFocus] = useState("");
 
-  const { state } = useLocation();
-  const { toDoList } = state || {};
+  // const { state } = useLocation();
+  // const { toDoList } = state || {};
 
   const navigate = useNavigate();
-  const { addItem } = useContext(ToDoListContext);
+  const { handleAddItem } = useContext(ToDoListContext);
 
   const handleChange = (e) => {
     setUserInput(e.currentTarget.value);
@@ -25,12 +25,12 @@ const AddItem = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const newTask = {
-      id: `${toDoList.length + 1}`,
+      // id: `${toDoList.length + 1}`,
       task: userInput,
       complete: false,
       dueDate: dueDate,
     };
-    addItem(newTask);
+    handleAddItem(newTask);
     navigate("/", { replace: true });
   };
 
