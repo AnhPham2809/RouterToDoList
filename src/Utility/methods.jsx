@@ -1,35 +1,40 @@
-const BASE_URL = "http://localhost:3000/toDoList";
-
-const fetchToDoList = () => {
-  return fetch(BASE_URL)
-    .then((response) => response.json())
-    .then((data) => data);
-};
-
-const addItem = (newItem) => {
-  return fetch(BASE_URL, {
+export const addItem = (BASE_URL, toDoList, setToDoList) => (newItem) => {
+  fetch(BASE_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(newItem),
   })
     .then((response) => response.json())
-    .then((newItem) => newItem);
+    .then((newItem) => {
+      const maxId = toDoList.reduce((max, item) => Math.max(max, item.id), 0);
+      setToDoList((prevList) => [...prevList, { ...newItem, id: maxId + 1 }]);
+    });
 };
 
-const editItem = (id, updatedItem) => {
-  return fetch(`${BASE_URL}/${id}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(updatedItem),
-  })
+export const editItem =
+  (BASE_URL, toDoList, setToDoList) => (id, updatedItem) => {
+    fetch(`${BASE_URL}/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedItem),
+    })
+      .then((response) => response.json())
+      .then((updatedItem) =>
+        setToDoList((prevList) =>
+          prevList.map((item) => (item.id === id ? updatedItem : item))
+        )
+      );
+  };
+
+export const deleteItem = (BASE_URL, toDoList, setToDoList) => (id) => {
+  fetch(`${BASE_URL}/${id}`, { method: "DELETE" })
     .then((response) => response.json())
-    .then((updatedItem) => updatedItem);
+    .then(() => {
+      setToDoList((prevList) => {
+        const newList = prevList.filter((item) => item.id !== id);
+        return newList.map((item) =>
+          item.id > id ? { ...item, id: item.id - 1 } : item
+        );
+      });
+    });
 };
-
-const deleteItem = (id) => {
-  return fetch(`${BASE_URL}/${id}`, { method: "DELETE" })
-    .then((response) => response.json())
-    .then(() => {});
-};
-
-export { addItem, editItem, deleteItem, fetchToDoList };

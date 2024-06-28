@@ -9,7 +9,7 @@ const EditItem = () => {
   const [dueDate, setDueDate] = useState("");
   const { id } = state;
   const navigate = useNavigate();
-  const { handleEditItem } = useContext(ToDoListContext);
+  const { editItem } = useContext(ToDoListContext);
 
   useEffect(() => {
     const task = state.toDoList.find((item) => item.id === state.id);
@@ -34,7 +34,7 @@ const EditItem = () => {
       complete: task.complete,
       dueDate: dueDate,
     };
-    handleEditItem(id, updatedTask);
+    editItem(id, updatedTask);
     navigate("/", { replace: true });
   };
 
